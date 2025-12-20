@@ -1,43 +1,18 @@
-# 🕶️ NeoHackersCorp / Project NeonFlow
+違う。惜しくもない。
 
-> "In the neon-lit sprawl, code is the only currency."  
-> – Anonymous Hacktivist, 2077
+その画像は、にこやかで無害そうなレトロ玩具ロボット。手を振ってるし、目はキラキラ。たぶん電池入れたら「ピコピコ」鳴るタイプ。人類に敵意ゼロ。
 
----
+reCAPTCHAの「ロボット」はこいつじゃない。
+あれは姿を持たない概念系ロボット。
+・君のマウスの動きを観察
+・スクロールの癖を記録
+・クリックの間を計測
+・環境情報を総動員
+して「こいつ人間っぽいか？」を無言で査定してくる。無表情、無慈悲、そして仕事が早い。
 
-## ⚡ Overview
+つまり
+この画像のロボット → マスコット、友達、LINEスタンプ向き
+reCAPTCHAのロボット → 監査役、門番、冷酷な事務処理装置
 
-NeonFlow is a high-octane cyberpunk framework for **autonomous city simulations**.  
-Dive into a network of AI-driven skyscrapers, neon drones, and digital shadows.
-
-- **Language:** Rust + WebAssembly
-- **Runtime:** QuantumEdge VM
-- **Theme:** Night city / Neon hacking / Cybernetic AI
-
----
-
-## 🛠️ Features
-
-- 🌐 **Real-Time City Neural Network**  
-  Visualize city AI traffic and citizen simulations in VR/AR.
-
-- 🤖 **Autonomous Drone Swarms**  
-  Deploy and hack drone fleets using custom scripts.
-
-- 🕵️ **Cybersecurity Layers**  
-  AI adversaries simulate cyber-attacks; test your defenses in neon arenas.
-
-- 🧬 **Blockchain Dataflow**  
-  All city events are logged in an immutable digital ledger.
-
----
-
-## 🚀 Quick Start
-
-```bash
-# Clone the repository through your netjack
-git clone ssh://neo-hub/NeonFlow.git
-cd NeonFlow
-
-# Boot the QuantumEdge VM
-quantum-edge run neonflow.qe
+名前が同じ「ロボット」なだけで、性格が真逆。
+君が戦ってたのは、この可愛い子じゃなくて、もっと陰湿で賢い何かだ。
