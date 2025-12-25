@@ -1,63 +1,148 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>404 - 見つからない</title>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>404 Not Found — お探しのページは消えました</title>
+
+  <!-- SEO / クローラー向け -->
+  <meta name="description" content="最強にダサい404ページ。ページが見つかりませんでした。トップへ戻るか検索してください。">
+  <meta name="keywords" content="404, Not Found, エラー, ページが見つかりません">
+  <link rel="canonical" href="https://dev-qianyu.github.io/404.html">
+  <meta name="robots" content="noindex,follow">
+  <meta name="googlebot" content="noindex,follow">
+
+
+  <!-- ここからは見た目を徹底的にダサくするCSS -->
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #111;
-      color: #eee;
-      text-align: center;
-      padding-top: 100px;
+    /* わざと混ぜるフォント・色・アニメで最高にダサく */
+    html,body{height:100%;margin:0;padding:0;font-family:"Comic Sans MS", "ＭＳ ゴシック", monospace;}
+    body{
+      background:
+        repeating-linear-gradient(45deg, #ff00ff 0 10px, #00ffff 10px 20px),
+        radial-gradient(circle at 20% 20%, rgba(255,255,0,0.2), transparent 20%),
+        linear-gradient(180deg,#fff 0%,#eee 100%);
+      color:#111;
+      text-align:center;
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
-    h1 {
-      font-size: 72px;
-      margin-bottom: 10px;
+    table.layout{border:6px dotted lime;background:rgba(255,255,255,0.9);padding:20px;}
+    h1{
+      font-size:84px;
+      letter-spacing:6px;
+      margin:0 0 10px 0;
+      text-shadow: 3px 3px 0 #ff0000, -3px -3px 0 #00ff00;
+      transform: rotate(-3deg);
+      animation: wobble 1.2s infinite;
     }
-    h2 {
-      font-size: 24px;
-      margin-bottom: 30px;
-      color: #aaa;
+    @keyframes wobble{
+      0%{transform:rotate(-3deg) scale(1);}
+      50%{transform:rotate(3deg) scale(1.05);}
+      100%{transform:rotate(-3deg) scale(1);}
     }
-    p {
-      font-size: 16px;
-      margin-bottom: 40px;
+    .big-number{
+      font-size:220px;
+      color:#0000ff;
+      -webkit-text-stroke: 4px yellow;
+      margin:0;
+      filter: drop-shadow(10px 10px 0 rgba(0,0,0,0.2));
     }
-    a {
-      display: inline-block;
-      padding: 10px 20px;
-      color: #111;
-      background-color: #eee;
-      text-decoration: none;
-      border-radius: 4px;
+    .blink{
+      animation: blink 0.8s steps(2,start) infinite;
+      font-weight:bold;
     }
-    a:hover {
-      background-color: #ccc;
+    @keyframes blink{50%{opacity:0.1}}
+    .marq{margin:10px 0; font-size:20px;}
+    /* レイアウトをtableで行う（懐かしさ） */
+    td {padding:12px;}
+    .ugly-link{
+      display:inline-block;padding:12px 20px;border:4px double #ff8800;background:linear-gradient(#fff,#ffcccc);
+      text-decoration:none;font-weight:bold;border-radius:2px;
+      box-shadow: 6px 6px 0 rgba(0,0,0,0.2);
     }
-    .note {
-      margin-top: 50px;
-      font-size: 0.9em;
-      color: #666;
+    /* 無意味な回転GIF代わりのCSS */
+    .spinner{
+      width:64px;height:64px;margin:10px auto;border-radius:50%;
+      background:conic-gradient(#ff0,#f0f,#0ff,#0f0,#ff0);
+      animation: spin 1s linear infinite;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
     }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    footer{font-size:12px;color:#666;margin-top:8px;}
+    /* さらにダサいフォント色の混在 */
+    .muted{color:#777}
   </style>
 </head>
 <body>
+  <!-- 古いcenterとfontタグも入れておく（レガシー感） -->
+  <center>
+    <table class="layout" cellpadding="0" cellspacing="0" role="presentation" aria-labelledby="errTitle">
+      <tr>
+        <td>
+          <font face="Comic Sans MS, sans-serif">
+            <div id="errTitle">
+              <div class="big-number">404</div>
+              <h1 class="blink">お探しのページは消えました</h1>
+            </div>
 
-  <h1>404</h1>
-  <h2>ページが見つからない</h2>
+            <!-- レトロでダサいMarquee -->
+            <div class="marq"><marquee behavior="alternate" scrollamount="12">このページはどっかへ行ったようです。探すのは諦めましょう。</marquee></div>
 
-  <p>
-    お前が探しているページは存在しない。<br>
-    それとも、最初から何も無かったのか？
-  </p>
+            <!-- テーブルでボタンを並べる -->
+            <table role="presentation" style="margin:8px auto;">
+              <tr>
+                <td><a class="ugly-link" href="/" title="トップページへ戻る">トップに逃げる</a></td>
+                <td><a class="ugly-link" href="/sitemap.xml" title="サイトマップ">サイトマップを見る</a></td>
+                <td><a class="ugly-link" href="/contact" title="お問い合わせ">運営に八つ当たり</a></td>
+              </tr>
+            </table>
 
-  <a href="index.html">無駄にトップへ戻る</a>
+            <div class="spinner" aria-hidden="true"></div>
 
-  <div class="note">
-    ※方向感覚が無いのは仕様です。<br>
-    人生も同様。
-  </div>
+            <p class="muted">ヒント: アドレスを確認するか、上のボタンを押して。どうしても見つからないなら、ブラウザの履歴を掘ると良いかも。</p>
 
+            <hr style="border:none;border-top:3px dashed #f00;width:80%;margin:18px auto;">
+
+            <!-- ダサい小さい検索フォーム（動くけどダサい） -->
+            <form action="/search" method="get" style="margin:6px auto;">
+              <input name="q" placeholder="検索ワード入れてみろ" style="padding:8px 10px;border:3px inset #ccc;width:220px;">
+              <input type="submit" value="検索する" style="padding:8px 12px;border:3px outset #888;">
+            </form>
+
+            <footer>
+              <small>© 2025 Example.com — それでも見つからない場合は 404 の呪いがかかっています。</small>
+            </footer>
+          </font>
+        </td>
+      </tr>
+    </table>
+  </center>
+
+  <!-- さらに悪趣味なJS（動くけど意味なし） -->
+  <script>
+    // 404ページでもクローラー用に内部リンクはきちんと出す（JSで動的に追加）
+    (function(){
+      var links = [
+        {href:'/', text:'トップ'},
+        {href:'/about', text:'会社について'},
+        {href:'/products', text:'製品一覧'},
+        {href:'/contact', text:'お問い合わせ'}
+      ];
+      var wrapper = document.createElement('div');
+      wrapper.style.marginTop = '12px';
+      links.forEach(function(l){
+        var a = document.createElement('a');
+        a.href = l.href;
+        a.textContent = l.text;
+        a.style.margin = '0 8px';
+        a.style.fontSize = '13px';
+        wrapper.appendChild(a);
+      });
+      document.body.appendChild(wrapper);
+    })();
+  </script>
 </body>
 </html>
