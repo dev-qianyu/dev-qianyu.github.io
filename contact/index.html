@@ -1,204 +1,394 @@
-<!-- ugly-contact-form.html
-     - 意図的にダサく・古臭く・アクセシビリティ無視で作ってあります
-     - 保存してブラウザで開いてください (例: ugly-contact-form.html)
--->
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <title>お問い合わせ（ごちゃごちゃ版）</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <style>
-    /* 無秩序なスタイルを詰め込み */
-    body {
-      background: repeating-linear-gradient(45deg, #ffeb3b 0 10px, #ff5722 10px 20px);
-      font-family: "Comic Sans MS", "Arial", sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background: url('') /* empty on purpose */ repeat;
-      padding: 18px;
-      text-align: center;
-      border-bottom: 6px dashed #000;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 48px;
-      color: #0a0;
-      text-shadow: 3px 3px 0 #f00;
-    }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>サイバーパンク問い合わせフォーム</title>
+<style>
+  /* --- カスタム可能な色変数 --- */
+  :root{
+    --bg1: #0b0f1a;
+    --neon-cyan: #00f0ff;
+    --neon-pink: #ff2db2;
+    --glass: rgba(255,255,255,0.06);
+    --accent: linear-gradient(90deg,var(--neon-cyan),var(--neon-pink));
+    --text: #e6f7ff;
+    --muted: rgba(230,247,255,0.65);
+  }
 
-    /* テーブルレイアウト：古典的にダメ */
-    .form-table {
-      width: 90%;
-      max-width: 980px;
-      margin: 24px auto;
-      border: 8px double #000;
-      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(200,200,200,0.85));
-      padding: 12px;
-    }
-    td {
-      padding: 12px;
-      vertical-align: top;
-    }
-    input[type=text], input[type=email], textarea, select {
-      border: 4px inset #333;
-      padding: 10px;
-      width: 100%;
-      box-sizing: border-box;
-      font-size: 16px;
-      background: #fff7e6;
-    }
-    /* 無意味にでかいボタン */
-    .send-btn {
-      display: inline-block;
-      padding: 18px 36px;
-      font-size: 20px;
-      border-radius: 6px;
-      border: 3px solid #222;
-      background: linear-gradient(#00e676, #00bfa5);
-      cursor: pointer;
-      box-shadow: 6px 6px 0 rgba(0,0,0,0.5);
-    }
+  /* --- ベース --- */
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: -apple-system,BlinkMacSystemFont,"Helvetica Neue","Segoe UI",Roboto,"Yu Gothic",Meiryo,"Hiragino Kaku Gothic ProN",sans-serif;
+    background: radial-gradient(1200px 600px at 10% 10%, rgba(0,240,255,0.06), transparent),
+                radial-gradient(900px 400px at 90% 90%, rgba(255,45,178,0.05), transparent),
+                var(--bg1);
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
 
-    /* 目に痛い通知 */
-    .notice {
-      font-weight: bold;
-      color: #b71c1c;
-      background: #fff8f0;
-      padding: 8px;
-      border: 3px dashed #b71c1c;
-      margin-bottom: 12px;
-    }
+  /* --- 背景グリッド（動く）--- */
+  .grid {
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background-image:
+      linear-gradient(rgba(0,0,0,0.12) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.12) 1px, transparent 1px);
+    background-size: 60px 60px, 60px 60px;
+    mix-blend-mode: overlay;
+    opacity:.6;
+    animation: drift 18s linear infinite;
+    transform-origin:center;
+  }
+  @keyframes drift{
+    from{transform:translateY(0) rotate(0.01deg)}
+    to{transform:translateY(-60px) rotate(0.01deg)}
+  }
 
-    /* アニメ：邪魔 */
-    @keyframes blinkish {
-      0% { opacity: 1; transform: rotate(-2deg); }
-      50% { opacity: 0.4; transform: rotate(2deg); }
-      100% { opacity: 1; transform: rotate(-2deg); }
-    }
-    .fancy {
-      display:inline-block;
-      animation: blinkish 2s infinite;
-    }
+  /* --- フォームカード --- */
+  .card{
+    width:100%;
+    max-width:760px;
+    border-radius:14px;
+    padding:28px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    position:relative;
+    overflow:hidden;
+    backdrop-filter: blur(8px) saturate(120%);
+  }
 
-    /* 小さなアクセシビリティ無視 */
-    .sr-only { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
-  </style>
+  /* neon border */
+  .card::before{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    background: conic-gradient(from 120deg, rgba(0,240,255,0.12), rgba(255,45,178,0.12));
+    filter: blur(10px);
+    z-index:0;
+    pointer-events:none;
+    mix-blend-mode:screen;
+  }
+  .card > *{position:relative; z-index:1}
+
+  header {
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:18px;
+  }
+  .logo{
+    width:56px;
+    height:56px;
+    border-radius:10px;
+    background: linear-gradient(135deg, rgba(0,240,255,0.12), rgba(255,45,178,0.12));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    color:var(--neon-cyan);
+    box-shadow: 0 6px 18px rgba(0,240,255,0.06);
+    border: 1px solid rgba(255,255,255,0.03);
+    font-size:20px;
+    letter-spacing:1px;
+  }
+  h1{
+    margin:0;
+    font-size:20px;
+    letter-spacing:0.6px;
+    color:var(--text);
+  }
+  p.lead{
+    margin:6px 0 0 0;
+    font-size:13px;
+    color:var(--muted);
+  }
+
+  form{display:grid; gap:12px; margin-top:12px}
+  label{font-size:12px; color:var(--muted); display:block; margin-bottom:6px}
+  .row{display:flex; gap:12px}
+  .col{flex:1; min-width:0}
+
+  input[type="text"],
+  input[type="email"],
+  textarea,
+  select{
+    width:100%;
+    padding:12px 14px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.04);
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+    color:var(--text);
+    outline:none;
+    resize:vertical;
+    min-height:44px;
+    font-size:14px;
+    transition: box-shadow .16s, transform .12s;
+  }
+  input:focus, textarea:focus, select:focus{
+    box-shadow: 0 0 18px rgba(0,240,255,0.06);
+    transform:translateY(-1px);
+    border-color: rgba(0,240,255,0.18);
+  }
+  textarea{min-height:140px; padding-top:12px; line-height:1.5}
+
+  /* ファイル風UI */
+  .file-label{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 12px;
+    border-radius:10px;
+    border:1px dashed rgba(255,255,255,0.04);
+    color:var(--muted);
+    cursor:pointer;
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+  }
+  .small-muted{font-size:12px; color:var(--muted)}
+
+  /* 送信ボタン（ネオン）*/
+  .actions{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-top:6px;
+  }
+  button.send{
+    border:0;
+    padding:12px 18px;
+    border-radius:10px;
+    font-weight:700;
+    letter-spacing:0.6px;
+    cursor:pointer;
+    background: var(--accent);
+    color:#071018;
+    box-shadow: 0 8px 30px rgba(255,45,178,0.12), 0 2px 0 rgba(255,255,255,0.02) inset;
+    transition: transform .12s, filter .12s;
+  }
+  button.send:active{transform:translateY(1px) scale(.997)}
+  button.send[disabled]{opacity:.6; cursor:not-allowed; filter:grayscale(.2)}
+
+  /* ステータスメッセージ */
+  #status{
+    min-width:220px;
+    text-align:right;
+    font-size:13px;
+    color:var(--muted);
+  }
+
+  /* 成功アニメーション */
+  .success{
+    display:none;
+    align-items:center;
+    gap:12px;
+    padding:12px;
+    border-radius:10px;
+    background: linear-gradient(90deg, rgba(0,240,255,0.06), rgba(255,45,178,0.03));
+    border:1px solid rgba(0,240,255,0.06);
+  }
+  .success.show{display:flex; animation: pop .28s ease-out}
+  @keyframes pop{
+    from{transform:scale(.95); opacity:0}
+    to{transform:scale(1); opacity:1}
+  }
+
+  /* 小さなグリッチ効果 */
+  .glitch{
+    position:relative;
+    display:inline-block;
+    color:var(--neon-cyan);
+    font-weight:800;
+    letter-spacing:1.4px;
+    font-size:14px;
+    text-transform:uppercase;
+  }
+  .glitch::after, .glitch::before{
+    content:attr(data-text);
+    position:absolute;
+    left:0; top:0;
+    width:100%;
+    clip:rect(0,9999px,0,0);
+  }
+  .glitch::before{animation: g1 2s infinite; color:var(--neon-pink); opacity:.7}
+  .glitch::after{animation: g2 3s infinite; color:var(--neon-cyan); opacity:.6}
+  @keyframes g1{
+    0%{clip:rect(0,9999px,0,0); transform:translate(0,0)}
+    10%{clip:rect(6px,9999px,56px,0); transform:translate(-1px,-1px)}
+    20%{clip:rect(0,9999px,0,0); transform:translate(0,0)}
+  }
+  @keyframes g2{
+    0%{clip:rect(0,9999px,0,0); transform:translate(0,0)}
+    15%{clip:rect(20px,9999px,80px,0); transform:translate(1px,1px)}
+    30%{clip:rect(0,9999px,0,0); transform:translate(0,0)}
+  }
+
+  /* レスポンシブ微調整 */
+  @media (max-width:560px){
+    .row{flex-direction:column}
+    header{gap:10px}
+    .logo{width:48px;height:48px;font-size:18px}
+    .card{padding:18px}
+  }
+</style>
 </head>
 <body>
-  <header>
-    <marquee behavior="alternate" scrollamount="10">
-      <h1 class="fancy"><font color="#ff007f">お問い合わせはこちら</font></h1>
-    </marquee>
-  </header>
+  <div class="grid" aria-hidden="true"></div>
 
-  <main>
-    <div class="form-table">
-      <div class="notice">※重要: このフォームは見た目を優先しています。実用性は保証しません。</div>
+  <main class="card" role="main" aria-labelledby="title">
+    <header>
+      <div class="logo" aria-hidden="true">CP</div>
+      <div>
+        <h1 id="title">サイバーパンクお問い合わせ</h1>
+        <p class="lead">ノイズ多め。必要事項を書いて送ってください — 自動応答は無しです（まだ）。</p>
+      </div>
+    </header>
 
-      <form id="uglyForm" action="#" method="post" onsubmit="return submitUgly(event)">
-        <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
-          <tr>
-            <td width="30%"><label for="name">お名前</label></td>
-            <td>
-              <!-- ラベルはあるがidだけ。placeholderは意味深 -->
-              <input id="name" name="name" type="text" placeholder="名前？（適当でいいよ）">
-            </td>
-          </tr>
+    <form id="contactForm" novalidate>
+      <div class="row">
+        <div class="col">
+          <label for="name">お名前 <span class="small-muted">(必須)</span></label>
+          <input type="text" id="name" name="name" autocomplete="name" required placeholder="山田 太郎" />
+        </div>
+        <div class="col">
+          <label for="email">メールアドレス <span class="small-muted">(必須)</span></label>
+          <input type="email" id="email" name="email" autocomplete="email" required placeholder="you@example.com" />
+        </div>
+      </div>
 
-          <tr>
-            <td><label for="email">メール</label></td>
-            <td><input id="email" name="email" type="email" placeholder="you@example.com"></td>
-          </tr>
+      <div>
+        <label for="subject">件名</label>
+        <input type="text" id="subject" name="subject" placeholder="例：協力依頼、バグ報告など" />
+      </div>
 
-          <tr>
-            <td><label for="topic">ジャンル</label></td>
-            <td>
-              <select id="topic" name="topic">
-                <option>選べ（適当）</option>
-                <option>質問</option>
-                <option>クレーム</option>
-                <option>その他</option>
-              </select>
-            </td>
-          </tr>
+      <div>
+        <label for="message">メッセージ <span class="small-muted">(必須)</span></label>
+        <textarea id="message" name="message" required placeholder="ここにお問い合わせ内容を入力してください..."></textarea>
+      </div>
 
-          <tr>
-            <td><label for="message">内容</label></td>
-            <td>
-              <textarea id="message" name="message" rows="6" placeholder="ここに長文でぶちまけろ"></textarea>
-            </td>
-          </tr>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+        <label class="file-label" for="fileInput" title="ファイル添付（任意）">
+          <input id="fileInput" name="attachment" type="file" style="display:none" />
+          📎 添付ファイル
+        </label>
+        <div class="small-muted">最大10MB / 画像・PDF推奨</div>
+      </div>
 
-          <tr>
-            <td>添付</td>
-            <td>
-              <!-- ファイル入力は無効化して見せかけだけ -->
-              <input type="file" disabled> <small>（無効）</small>
-            </td>
-          </tr>
+      <div class="actions" style="align-items:center">
+        <div id="status" aria-live="polite">準備できてます。</div>
 
-          <tr>
-            <td>確認</td>
-            <td>
-              <label><input type="checkbox" name="agree"> 規約とか同意する（たぶん）</label>
-            </td>
-          </tr>
+        <div style="display:flex;gap:10px;align-items:center">
+          <div class="success" id="successBubble" role="status" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M20 6L9 17l-5-5" stroke="#00f0ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <div>
+              <div style="font-weight:700;font-size:13px">送信完了</div>
+              <div class="small-muted" style="margin-top:2px">ありがとうございます。追って連絡します。</div>
+            </div>
+          </div>
 
-          <tr>
-            <td></td>
-            <td>
-              <button type="submit" class="send-btn">送信する（できるとは言ってない）</button>
-              <button type="reset" style="margin-left:12px;padding:12px;border:2px solid #000;background:#ffd54f;">リセット</button>
-            </td>
-          </tr>
-        </table>
-      </form>
-
-      <p style="margin-top:14px;font-size:12px;color:#444;">
-        <font color="#7b1fa2">注:</font> このフォームは学習用のためバリデーションやサーバ送信は意図的に杜撰です。JSが無効だとさらにカオスになります。
-      </p>
-    </div>
+          <button type="submit" class="send" id="sendBtn">
+            <span class="glitch" data-text="SEND">SEND</span>
+          </button>
+        </div>
+      </div>
+    </form>
   </main>
 
-  <script>
-    // 適当なクライアントサイド処理で「送信」するふりをする
-    function submitUgly(e) {
-      e.preventDefault();
-      // いいかげんな検証
-      var name = document.getElementById('name').value.trim();
-      var email = document.getElementById('email').value.trim();
-      var msg = document.getElementById('message').value.trim();
+<script>
+  // --- シンプルなクライアント検証 + 擬似送信 --- //
+  const form = document.getElementById('contactForm');
+  const status = document.getElementById('status');
+  const sendBtn = document.getElementById('sendBtn');
+  const successBubble = document.getElementById('successBubble');
 
-      // ちゃんとした正規表現は使わない、裸のcontainsで判断
-      if (!name || !email.includes('@') || msg.length < 5) {
-        alert('入力に問題があります。まあ気にするな。');
-        // 送信しない（デモ用なので）
-        return false;
-      }
+  function showStatus(text){
+    status.textContent = text;
+  }
 
-      // 見せかけの送信エフェクト
-      document.querySelector('.send-btn').textContent = '送信中…';
-      setTimeout(function(){
-        // ダサいモーダル代わり
-        var overlay = document.createElement('div');
-        overlay.style.position = 'fixed';
-        overlay.style.left = 0;
-        overlay.style.top = 0;
-        overlay.style.right = 0;
-        overlay.style.bottom = 0;
-        overlay.style.background = 'rgba(0,0,0,0.7)';
-        overlay.style.display = 'flex';
-        overlay.style.alignItems = 'center';
-        overlay.style.justifyContent = 'center';
-        overlay.style.zIndex = 9999;
-        overlay.innerHTML = '<div style="background:#fff;padding:20px;border:6px solid #000;text-align:center;font-size:18px;">送信完了！でも実際にはどこにも送ってません</div>';
-        document.body.appendChild(overlay);
-      }, 600);
-      return false;
+  function setLoading(loading){
+    sendBtn.disabled = loading;
+    if(loading){
+      showStatus('送信中… ネオンが焦げる前に完了させます');
+      sendBtn.innerHTML = 'SENDING…';
+    } else {
+      sendBtn.innerHTML = '<span class="glitch" data-text="SEND">SEND</span>';
     }
-  </script>
+  }
+
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    // HTML5 validityを先にチェック
+    if(!form.checkValidity()){
+      // ブラウザの標準ツールチップを出すためにちょっとトリック
+      const firstInvalid = form.querySelector(':invalid');
+      firstInvalid.reportValidity?.();
+      showStatus('必須項目を確認してください。');
+      return;
+    }
+
+    // 追加の軽いバリデーション
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const message = form.message.value.trim();
+    if(message.length < 6){
+      showStatus('メッセージはもう少し詳しく書いてください。');
+      form.message.focus();
+      return;
+    }
+
+    // ここで実際の送信処理を行う（例: fetch('/api/contact', {method:'POST', body:...})）
+    // 現在はダミー：模擬遅延 + 成功表示
+    try {
+      setLoading(true);
+
+      // 実際の実装例（コメントアウト）
+      // const payload = new FormData(form);
+      // const res = await fetch('/api/contact', { method:'POST', body: payload });
+      // if(!res.ok) throw new Error('server');
+
+      await new Promise(r => setTimeout(r, 1100)); // 疑似ネットワーク待ち
+
+      // 成功
+      successBubble.classList.add('show');
+      successBubble.setAttribute('aria-hidden','false');
+      showStatus('送信完了 — チェックを入れておきました。');
+      form.reset();
+      // ふわっと消す
+      setTimeout(()=> {
+        successBubble.classList.remove('show');
+        successBubble.setAttribute('aria-hidden','true');
+        setLoading(false);
+      }, 2500);
+
+    } catch(err){
+      console.error(err);
+      showStatus('送信に失敗しました。後でもう一度試してください。');
+      setLoading(false);
+    }
+  });
+
+  // ファイル名をステータスに表示（任意）
+  const fileInput = document.getElementById('fileInput');
+  fileInput.addEventListener('change', ()=>{
+    if(fileInput.files.length){
+      const f = fileInput.files[0];
+      const sizeMB = (f.size / (1024*1024)).toFixed(1);
+      showStatus(`添付: ${f.name} (${sizeMB}MB)`);
+    } else {
+      showStatus('準備できてます。');
+    }
+  });
+</script>
 </body>
 </html>
